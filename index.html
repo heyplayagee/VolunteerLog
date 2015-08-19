@@ -4,30 +4,54 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<script type="text/javascript">
-//<![CDATA[
-try{if (!window.CloudFlare) {var CloudFlare=[{verbose:0,p:0,byc:0,owlid:"cf",bag2:1,mirage2:0,oracle:0,paths:{cloudflare:"/cdn-cgi/nexp/dok3v=1613a3a185/"},atok:"b1dc09f1a07154fab24254cda8140aa3",petok:"6b4700c759ca3b0d7a3cca4ddd9168206fd85cc6-1439983250-1800",betok:"a710a5ab6af2d5c7278144c74d0cdcfbb326313c-1439983250-120",zone:"hawksey.info",rocket:"a",apps:{}}];document.write('<script type="text/javascript" src="//ajax.cloudflare.com/cdn-cgi/nexp/dok3v=e9627cd26a/cloudflare.min.js"><'+'\/script>');}}catch(e){};
-//]]>
-</script>
-<script data-cfasync="false" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<title>Untitled Document</title>
-<link href="http://mcdn.hawksey.info/wp-content/themes/tiny-forge/style.css?ver=1.4.1.css" rel="stylesheet" type="text/css">
+<script data-cfasync="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.plugin.js"></script> 
+	<script type="text/javascript" src="jquery.datetimeentry.js"></script>
+<title>CAB Volunteer Log</title>
 </head>
 <body>
-<form id="foo">
-<p><label for="name">Name:</label>
-<input id="name" name="name" type="text" value=""/></p>
-<p><label for="comment">Comment:</label><br/>
-<textarea id="comment" name="comment" cols="40"></textarea></p>
-<p id="result"></p>
-<input type="submit" value="Send"/>
-</form>
+	<form id="form">
+        <fieldset>
+            <label>First and Last Name</label>
+            <input id="name" type="text" name="Name">
+        </fieldset>
+        <fieldset>
+            <label>Event Name</label>
+            <input id="eventName" type="text" name="Event">
+        </fieldset>
+        <!-- todays date and location is automatically inserted -->
+        <fieldset>
+            <label>Time Started</label>
+           <input type="text" id="timeStart" name="Start Time">
+        </fieldset>
+        <fieldset>
+            <label>Time Ended</label> <!-- have option for the time right now -->
+            <input type="text" id="timeEnd" name="End Time">
+        </fieldset>
+        <fieldset>
+            <label>Name of CAB Leader</label>
+            <input type="text" id="leader" name="CAB Leader"></input>
+        </fieldset>
+        <fieldset>
+            <label>(optional) Volunteering on behalf of</label>
+            <input type="text" id="otherOrg" name="Other Org"></input>
+        </fieldset>
+        <fieldset>
+            <label>Comment</label>
+            <input type="text" id="comment" name="Comment"></input>
+        </fieldset>
+        <div style="width: 100%; display: block; float: right;">
+            <button id="send" type="submit">
+                Send
+            </button>
+        </div>
+	</form>
 <script data-cfasync="false" type="text/javascript">
 jQuery( document ).ready(function( $ ) {
 	// variable to hold request
 	var request;
 	// bind to the submit event of our form
-	$("#foo").submit(function(event){
+	$("#form").submit(function(event){
 		// abort any pending request
 		if (request) {
 			request.abort();
@@ -38,12 +62,13 @@ jQuery( document ).ready(function( $ ) {
 		var $inputs = $form.find("input, select, button, textarea");
 		// serialize the data in the form
 		var serializedData = $form.serialize();
+		console.log(serializedData);
 	
 		// let's disable the inputs for the duration of the ajax request
 		// Note: we disable elements AFTER the form data has been serialized.
 		// Disabled form elements will not be serialized.
 		$inputs.prop("disabled", true);
-		$('#result').text('Sending data...');
+		$('#send').text('Sending data...');
 	
 		// fire off the request to /form.php
 		request = $.ajax({
@@ -55,7 +80,7 @@ jQuery( document ).ready(function( $ ) {
 		// callback handler that will be called on success
 		request.done(function (response, textStatus, jqXHR){
 			// log a message to the console
-			$('#result').html('<a href="https://docs.google.com/spreadsheets/d/15bzRXuovJNppLOwNitKmUrPj7_IFey3RVqXvhrZbH_4/edit?usp=sharing" target="_blank">Success - see Google Sheet</a>');
+			$('#send').html('<a href="https://docs.google.com/spreadsheets/d/15bzRXuovJNppLOwNitKmUrPj7_IFey3RVqXvhrZbH_4/edit?usp=sharing" target="_blank">Success - see Google Sheet</a>');
 			console.log("Hooray, it worked!");
 		});
 	
@@ -78,6 +103,15 @@ jQuery( document ).ready(function( $ ) {
 		// prevent default posting of form
 		event.preventDefault();
 	});
+});
+
+/* Date & Time Entry */
+jQuery(function () {
+    $.datetimeEntry.setDefaults({spinnerImage: "spinnerDefault.png"});
+    $('#timeStart').datetimeEntry();
+    $('#timeEnd').datetimeEntry();
+    $('#dateEntry').datetimeEntry({datetimeFormat: 'O/D/Y'});
+    $('#timeEntry').datetimeEntry({datetimeFormat: 'H:Ma'});
 });
 </script>
 </body>
