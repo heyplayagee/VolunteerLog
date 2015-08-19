@@ -1,6 +1,6 @@
-Tabletop.init( { key: '1163y60SPTwj0ikg9YVHTekbSQSTzS_BAxSXgmm648tk',
-                   callback: console.log(""),
-                   simpleSheet: true } )
+// Tabletop.init( { key: '1163y60SPTwj0ikg9YVHTekbSQSTzS_BAxSXgmm648tk',
+//                    callback: console.log(""),
+//                    simpleSheet: true } )
 
 //sign up
 // function signUp(data){
@@ -41,6 +41,35 @@ Tabletop.init( { key: '1163y60SPTwj0ikg9YVHTekbSQSTzS_BAxSXgmm648tk',
 - need to set id for username, couldn't find "newusername", etc.
 */
 
+/* create new user account */
+function addAccount(){
+	var ref = new Firebase("https://blistering-fire-3247.firebaseio.com/");
+ref.createUser({
+  email : "stacy.gee@girlswhocode.com",
+  password : "mypassword"
+}, function(error, userData) {
+  if (error) {
+    console.log("Error creating user:", error);
+  } else {
+    console.log("Successfully created user account with uid:", userData.uid);
+  }
+});
+}
+
+/*login user once login is clicked*/
+function login(){
+var ref = new Firebase("https://blistering-fire-3247.firebaseio.com");
+ref.authWithPassword({
+  email : $('#loginEmail').val(),
+  password : $('#loginPassword').val()
+}, function(error, authData) {
+  if (error) {
+    console.log("Login Failed!", error);
+  } else {
+    console.log("Authenticated successfully with payload:", authData);
+  }
+});
+}
 function postContactToGoogle(){
 		var username = $('#newUsername').val();
 		var password = $('#newPassword').val();
@@ -54,7 +83,6 @@ function postContactToGoogle(){
             url: "https://docs.google.com/forms/d/10n6ZtwkB3GCirNvX85FP8_qHTAKaZNIKlh22jOmmTvM/formResponse",
             data: {"entry_1725144764" : username, "entry.2026356525" : password, "entry.1223546042": name},
          	type: "POST",
-         	datatype: "jsonp"
          	datatype: "xml"
          });
 }
